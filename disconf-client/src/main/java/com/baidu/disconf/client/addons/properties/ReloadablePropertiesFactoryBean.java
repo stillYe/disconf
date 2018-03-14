@@ -18,6 +18,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import com.baidu.disconf.client.DisconfMgr;
+import com.baidu.disconf.client.config.DisFileConfig;
 
 /**
  * A properties factory bean that creates a reconfigurable Properties object.
@@ -33,9 +34,12 @@ public class ReloadablePropertiesFactoryBean extends PropertiesFactoryBean imple
 
     protected static final Logger log = LoggerFactory.getLogger(ReloadablePropertiesFactoryBean.class);
 
+    private List<Resource> resources = new ArrayList<Resource>();
     private Resource[] locations;
     private long[] lastModified;
     private List<IReloadablePropertiesListener> preListeners;
+    
+    private List<DisFileConfig> fileConfigs;
 
     /**
      * 定义资源文件
@@ -51,8 +55,6 @@ public class ReloadablePropertiesFactoryBean extends PropertiesFactoryBean imple
     /**
      */
     public void setLocations(List<String> fileNames) {
-
-        List<Resource> resources = new ArrayList<Resource>();
         for (String filename : fileNames) {
 
             // trim
@@ -88,8 +90,45 @@ public class ReloadablePropertiesFactoryBean extends PropertiesFactoryBean imple
         lastModified = new long[locations.length];
         super.setLocations(locations);
     }
+    
+	public void setFileConfigs(List<DisFileConfig> fileConfigs) {
+		if (fileConfigs != null && !fileConfigs.isEmpty()) {
+			log.info(fileConfigs.toString());
+			for (DisFileConfig fileConfig : fileConfigs) {
 
-    /**
+	            // trim
+	            String filename = fileConfig.getFilename().trim();
+	            //
+	            // register to disconf
+	            //
+	            DisconfMgr.getInstance().reloadableScan(fileConfig);
+
+	            //
+	            // only properties will reload
+	            //
+	            String ext = FilenameUtils.getExtension(filename);
+	            if (ext.equals("properties")) {
+
+	                PathMatchingResourcePatternResolver pathMatchingResourcePatternResolver =
+	                        new PathMatchingResourcePatternResolver();
+	                try {
+	                    Resource[] resourceList = pathMatchingResourcePatternResolver.getResources(filename);
+	                    for (Resource resource : resourceList) {
+	                        resources.add(resource);
+	                    }
+	                } catch (IOException e) {
+	                    e.printStackTrace();
+	                }
+	            }
+	        }
+		}
+
+        this.locations = resources.toArray(new Resource[resources.size()]);
+        lastModified = new long[locations.length];
+        super.setLocations(locations);
+	}
+
+	/**
      * get file name from resource
      *
      * @param fileName
@@ -121,6 +160,10 @@ public class ReloadablePropertiesFactoryBean extends PropertiesFactoryBean imple
     protected Resource[] getLocations() {
         return locations;
     }
+    
+    public List<DisFileConfig> getFileConfigs() {
+		return fileConfigs;
+	}
 
     /**
      * listener , 用于通知回调
