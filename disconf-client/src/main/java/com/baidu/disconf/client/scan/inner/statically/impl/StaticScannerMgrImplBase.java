@@ -17,21 +17,21 @@ public class StaticScannerMgrImplBase {
         DisConfCommonModel disConfCommonModel = new DisConfCommonModel();
 
         // app
-        if (!app.isEmpty()) {
+        if (app != null && !app.isEmpty()) {
             disConfCommonModel.setApp(app);
         } else {
             disConfCommonModel.setApp(DisClientConfig.getInstance().APP);
         }
 
         // env
-        if (!env.isEmpty()) {
+        if (env != null && !env.isEmpty()) {
             disConfCommonModel.setEnv(env);
         } else {
             disConfCommonModel.setEnv(DisClientConfig.getInstance().ENV);
         }
 
         // version
-        if (!version.isEmpty()) {
+        if (version != null && !version.isEmpty()) {
             disConfCommonModel.setVersion(version);
         } else {
             disConfCommonModel.setVersion(DisClientConfig.getInstance().VERSION);

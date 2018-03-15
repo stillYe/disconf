@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.baidu.disconf.client.config.DisClientConfig;
+import com.baidu.disconf.client.config.DisFileConfig;
 import com.baidu.disconf.client.scan.ScanMgr;
 import com.baidu.disconf.client.scan.inner.dynamic.ScanDynamicStoreAdapter;
 import com.baidu.disconf.client.scan.inner.statically.StaticScannerMgr;
@@ -112,6 +113,17 @@ public class ScanMgrImpl implements ScanMgr {
     public void reloadableScan(String fileName) throws Exception {
 
         StaticScannerNonAnnotationFileMgrImpl.scanData2Store(fileName);
+    }
+    
+    /**
+     * reloadable file scan
+     *
+     * @throws Exception
+     */
+    @Override
+    public void reloadableScan(DisFileConfig fileConfig) throws Exception {
+
+        StaticScannerNonAnnotationFileMgrImpl.scanData2Store(fileConfig);
     }
 
 }

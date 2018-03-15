@@ -11,6 +11,7 @@ import org.springframework.context.ApplicationContextAware;
 
 import com.baidu.disconf.client.config.ConfigMgr;
 import com.baidu.disconf.client.config.DisClientConfig;
+import com.baidu.disconf.client.config.DisFileConfig;
 import com.baidu.disconf.client.core.DisconfCoreFactory;
 import com.baidu.disconf.client.core.DisconfCoreMgr;
 import com.baidu.disconf.client.scan.ScanFactory;
@@ -184,6 +185,37 @@ public class DisconfMgr implements ApplicationContextAware {
 
                     if (scanMgr != null) {
                         scanMgr.reloadableScan(fileName);
+                    }
+
+                    if (disconfCoreMgr != null) {
+                        disconfCoreMgr.processFile(fileName);
+                    }
+                    LOGGER.debug("disconf reloadable file: {}", fileName);
+                }
+
+            } catch (Exception e) {
+
+                LOGGER.error(e.toString(), e);
+            }
+        }
+    }
+    
+    /**
+     * reloadable config file scan, for xml config
+     */
+    public synchronized void reloadableScan(DisFileConfig fileConfig) {
+
+        if (!isFirstInit) {
+            return;
+        }
+
+        if (DisClientConfig.getInstance().ENABLE_DISCONF) {
+            try {
+            	String fileName = fileConfig.getFilename().trim();
+                if (!DisClientConfig.getInstance().getIgnoreDisconfKeySet().contains(fileName)) {
+
+                    if (scanMgr != null) {
+                        scanMgr.reloadableScan(fileConfig);
                     }
 
                     if (disconfCoreMgr != null) {
