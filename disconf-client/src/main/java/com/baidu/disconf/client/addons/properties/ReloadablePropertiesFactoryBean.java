@@ -14,6 +14,9 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.PropertiesPropertySource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
@@ -267,9 +270,14 @@ public class ReloadablePropertiesFactoryBean extends PropertiesFactoryBean imple
      *
      * @throws IOException
      */
-    private void doReload() throws IOException {
-        reloadableProperties.setProperties(mergeProperties());
-    }
+	private void doReload() throws IOException {
+		Properties properties = mergeProperties();
+		
+		reloadableProperties.setProperties(properties);
+		
+		ConfigurableEnvironment env = (ConfigurableEnvironment) applicationContext.getEnvironment();
+		env.getPropertySources().addFirst(new PropertiesPropertySource("disconf-properties", properties));
+	}
 
     /**
      * @return
