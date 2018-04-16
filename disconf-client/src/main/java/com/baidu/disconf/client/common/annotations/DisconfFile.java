@@ -29,6 +29,7 @@ public @interface DisconfFile {
 
     /**
      * 版本,默认为用户指定的版本
+     * 支持环境变量替换
      */
     String version() default "";
 

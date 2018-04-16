@@ -23,6 +23,7 @@ import com.baidu.disconf.client.config.DisClientSysConfig;
 import com.baidu.disconf.client.scan.inner.statically.StaticScannerMgr;
 import com.baidu.disconf.client.scan.inner.statically.model.ScanStaticModel;
 import com.baidu.disconf.client.store.DisconfStoreProcessorFactory;
+import com.baidu.disconf.client.support.utils.ConfigLoaderUtils;
 import com.baidu.disconf.client.support.utils.MethodUtils;
 import com.baidu.disconf.core.common.constants.DisConfigTypeEnum;
 import com.baidu.disconf.core.common.path.DisconfWebPathMgr;
@@ -102,11 +103,12 @@ public class StaticScannerFileMgrImpl extends StaticScannerMgrImplBase implement
         // file type
         disconfCenterFile.setSupportFileTypeEnum(SupportFileTypeEnum.getByFileName(disconfFileAnnotation.filename()));
 
+        // file version
+		String version = ConfigLoaderUtils.replaceEnvProperty(disconfFileAnnotation.version());
         //
         // disConfCommonModel
         DisConfCommonModel disConfCommonModel =
-                makeDisConfCommonModel(disconfFileAnnotation.app(), disconfFileAnnotation.env(), disconfFileAnnotation
-                        .version());
+                makeDisConfCommonModel(disconfFileAnnotation.app(), disconfFileAnnotation.env(), version);
         disconfCenterFile.setDisConfCommonModel(disConfCommonModel);
 
         // Remote URL

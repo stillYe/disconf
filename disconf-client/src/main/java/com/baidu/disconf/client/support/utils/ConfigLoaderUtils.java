@@ -7,8 +7,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -153,4 +158,25 @@ public final class ConfigLoaderUtils {
             }
         }
     }
+    
+	private final static Pattern ENV_PATTERN = Pattern.compile("#\\{(.*?)\\}");
+    
+	public static String replaceEnvProperty(String target) {
+		Matcher m = ENV_PATTERN.matcher(target);
+		List<String> items = new ArrayList<String>();
+		while (m.find()) {
+			items.add(target.substring(m.start(), m.end()));
+		}
+		for (String item : items) {
+			String key = item.replace("#{", StringUtils.EMPTY).replace("}", StringUtils.EMPTY);
+			if (key.length() == 0) {
+				target = target.replace(item, StringUtils.EMPTY);
+			} else {
+				target = target.replace(item, System.getProperty(key));
+			}
+
+		}
+		return target;
+	}
+
 }
