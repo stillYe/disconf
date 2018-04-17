@@ -82,7 +82,7 @@ public class ScanPrinterUtils {
             DisconfFile disconfFile = item.getAnnotation(DisconfFile.class);
             LOGGER.info("\tfile name: " + disconfFile.filename());
             LOGGER.info("\tenv: " + disconfFile.env());
-            LOGGER.info("\tversion: " + disconfFile.env());
+            LOGGER.info("\tversion: " + disconfFile.version());
         }
     }
 
