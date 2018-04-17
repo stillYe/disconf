@@ -161,6 +161,12 @@ public final class ConfigLoaderUtils {
     
 	private final static Pattern ENV_PATTERN = Pattern.compile("#\\{(.*?)\\}");
     
+	/**
+	 * 替换环境变量，格式：#{key}
+	 * 
+	 * @param target
+	 * @return
+	 */
 	public static String replaceEnvProperty(String target) {
 		Matcher m = ENV_PATTERN.matcher(target);
 		List<String> items = new ArrayList<String>();
@@ -169,12 +175,11 @@ public final class ConfigLoaderUtils {
 		}
 		for (String item : items) {
 			String key = item.replace("#{", StringUtils.EMPTY).replace("}", StringUtils.EMPTY);
-			if (key.length() == 0) {
-				target = target.replace(item, StringUtils.EMPTY);
-			} else {
-				target = target.replace(item, System.getProperty(key));
+			String value = StringUtils.EMPTY;
+			if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(System.getProperty(key))) {
+				value = System.getProperty(key);
 			}
-
+			target = target.replace(item, value);
 		}
 		return target;
 	}
