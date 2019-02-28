@@ -26,7 +26,7 @@
     <properties>
         <!-- 模块版本号 -->
         <disconf-core.version>2.6.36</disconf-core.version>
-        <disconf-client.version>2.6.36-custom-config-SNAPSHOT</disconf-client.version>
+        <disconf-client.version>2.6.36-custom-config-spring5-SNAPSHOT</disconf-client.version>
         <disconf-client-spring.version>2.6.36</disconf-client-spring.version>
 
         <!-- Spring項目配置 -->
@@ -38,7 +38,7 @@
         <java.version>1.6</java.version>
         <source.version>1.6</source.version>
         <target.version>1.6</target.version>
-        <spring.version>4.1.7.RELEASE</spring.version>
+        <spring.version>5.1.2.RELEASE</spring.version>
         <spring.amqp.version>1.4.5.RELEASE</spring.amqp.version>
         <junit.version>4.10</junit.version>
         <jsp.version>2.0</jsp.version>

@@ -31,7 +31,7 @@ public abstract class AbstractTestCase extends AbstractTransactionalJUnit4Spring
     @Autowired
     @Qualifier(value = "dataSource2")
     public void setDataSource(DataSource dataSource) {
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
+//        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     private static final String TEST_DATA_SQL_BASE_PATH = "sql/testdata/1_0_0/";
