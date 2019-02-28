@@ -1,5 +1,6 @@
 package com.baidu.disconf.client.watch.impl;
 
+import com.baidu.disconf.client.config.DisClientConfig;
 import org.apache.zookeeper.CreateMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -105,7 +106,8 @@ public class WatchMgrImpl implements WatchMgr {
     private void makeTempChildPath(String path, String data) {
 
         String finerPrint = DisClientComConfig.getInstance().getInstanceFingerprint();
-
+        //zk节点附加disconf.app,方便web查看
+        finerPrint = finerPrint + "_" + DisClientConfig.getInstance().APP;
         String mainTypeFullStr = path + "/" + finerPrint;
         try {
             ZookeeperMgr.getInstance().createEphemeralNode(mainTypeFullStr, data, CreateMode.EPHEMERAL);
